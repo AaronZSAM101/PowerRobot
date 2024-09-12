@@ -35,8 +35,11 @@ def login_and_query(config):
         # 构建失败消息内容
         error_message = f"登录失败，状态码: {response.status_code}"
         print(error_message)
-        send_wechat_message(config['wx_robot_url'], error_message)
-        send_email(config, error_message)
+        if config['wx_robot_url'] != "":
+            send_email(config, error_message)
+        else:
+            send_wechat_message(config['wx_robot_url'], error_message, config="")
+            send_email(config, error_message)
         return None
 
 # 正则匹配电量数据

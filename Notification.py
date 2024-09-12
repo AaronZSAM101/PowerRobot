@@ -46,7 +46,7 @@ def send_wechat_message(wx_robot_url, message_content, config):
 
 
 # 发送邮件
-def send_email(config, message_content, subject="电沸桂de余额提醒"):
+def send_email(config, message_content, subject="电沸桂消息提醒"):
     if not config.get('smtp_server'):
         print("邮件服务器未配置，跳过邮件发送。")
         return
@@ -86,6 +86,6 @@ def push_notification(config, remaining_balance, remaining_power, total_power):
 
     else:
         print(f"剩余金额为 {remaining_balance:.2f} 元，足够使用，无需续费。")
-        message_content += "\n请享受您的美好时光！"
-        send_wechat_message(config['wx_robot_url'], message_content, config)
-        send_email(config, message_content)
+        # message_content += "\n请享受您的美好时光！"
+        # send_wechat_message(config['wx_robot_url'], message_content, config)
+        # send_email(config, message_content)

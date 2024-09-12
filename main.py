@@ -12,7 +12,7 @@ def main():
     response_text = login_and_query(config)
     if response_text:
         # 提取电量信息
-        remaining_power, total_power, remaining_balance = extract_power_info(response_text, config['price_per_kwh'])
+        remaining_power, total_power, remaining_balance = extract_power_info(response_text, config)
         if remaining_power and remaining_balance:
             # 推送电量余额通知
             push_notification(config, remaining_balance, remaining_power, total_power)

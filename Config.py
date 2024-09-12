@@ -9,12 +9,27 @@ def is_valid_wx_url(url):
 # 检查并加载配置文件
 def load_config():
     try:
-        with open('config.json', 'r') as f:
+        with open('config.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except FileNotFoundError:
         return None
 
-# 初始化配置文件
+# 验证正则表达式输入格式是否正确
+def validate_regex(regex):
+    try:
+        re.compile(regex)
+        return True
+    except re.error:
+        return False
+
+# 验证价格输入是否为浮点数
+def validate_float(value):
+    try:
+        float(value)
+        return True
+    except ValueError:
+        return False
+
 def init_config():
     print('正在初始化配置文件，请根据提示进行操作')
     config = {}
@@ -27,11 +42,30 @@ def init_config():
     config['login_origin'] = input("请输入登录时的Origin:").strip()
     config['query_url'] = input('请输入查询地址的api url:').strip()
     config['query_referer'] = input('请输入查询时的Referer:').strip()
-    config['power_info_regex'] = input('请输入查询的正则表达式:').strip()
-    config['price_per_kwh'] = float(input("请输入单位电价:").strip())
+
+    # 验证正则表达式输入并进行反斜杠转义
+    while True:
+        power_info_regex = input('请输入查询的正则表达式:').strip()
+        if validate_regex(power_info_regex):
+            # 转换反斜杠为双反斜杠
+            config['power_info_regex'] = power_info_regex.replace('\\', '\\\\')
+            break
+        else:
+            print("无效的正则表达式，请重新输入。")
+
+    # 验证电价输入
+    while True:
+        price_per_kwh = input("请输入单位电价:").strip()
+        if validate_float(price_per_kwh):
+            config['price_per_kwh'] = float(price_per_kwh)
+            break
+        else:
+            print("无效的电价，请输入有效的浮点数。")
+
+    # 其他配置项
     config['wx_robot_url'] = input("请输入企业微信机器人URL（如不使用企业微信推送可留空）:").strip()
     config['smtp_server'] = input("请输入SMTP服务器地址（如不使用邮件推送可留空）:").strip()
-    
+
     if config['smtp_server']:
         config['smtp_port'] = int(input("请输入SMTP端口号:").strip())
         config['use_ssl'] = input("该端口是否为SSL连接？请输入 yes 或 no:").strip().lower() == 'yes'
@@ -40,7 +74,7 @@ def init_config():
         config['admin_email'] = input("请输入机器人管理员邮箱（多个邮箱用英文逗号分隔）:").strip().split(',')
         config['recipient_email'] = input("请输入收件人邮箱（多个邮箱用英文逗号分隔）:").strip().split(',')
 
-    # 将配置保存到config.json文件
+    # 保存配置
     with open('config.json', 'w') as f:
         json.dump(config, f, indent="\t")
     return config
