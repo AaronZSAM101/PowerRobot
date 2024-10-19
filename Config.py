@@ -63,6 +63,8 @@ def init_config():
             print("无效的电价，请输入有效的浮点数。")
 
     # 其他配置项
+    config['remaining_balance_config'] = input("请输入剩余金额提醒阈值（默认为25元）:").strip() or 25
+    config['remaining_power_config'] = input("请输入剩余电量提醒阈值（默认为0度）:").strip() or 20
     config['wx_robot_url'] = input("请输入企业微信机器人URL（如不使用企业微信推送可留空）:").strip()
     config['smtp_server'] = input("请输入SMTP服务器地址（如不使用邮件推送可留空）:").strip()
 
@@ -81,7 +83,7 @@ def init_config():
 
 # 验证配置文件的完整性
 def validate_config(config):
-    required_keys = ['username', 'password', 'user_agent', 'content_type', 'login_url', 'login_referer', 'login_origin', 'query_url', 'query_referer', 'power_info_regex', 'price_per_kwh']
+    required_keys = ['username', 'password', 'user_agent', 'content_type', 'login_url', 'login_referer', 'login_origin', 'query_url', 'query_referer', 'power_info_regex', 'price_per_kwh', 'remaining_balance_config', 'remaining_power_config']
     email_required_keys = ['smtp_server', 'smtp_port', 'use_ssl', 'smtp_user', 'smtp_password', 'recipient_email']
 
     # 检查必填项是否存在
