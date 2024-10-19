@@ -1,6 +1,6 @@
 from Config import load_config, init_config, validate_config
 from GetInfo import login_and_query, extract_power_info
-from Notification import push_notification
+from Notification import push_power_notification
 
 def main():
     # 加载配置，如果配置无效则重新初始化
@@ -15,7 +15,7 @@ def main():
         remaining_power, total_power, remaining_balance = extract_power_info(response_text, config)
         if remaining_power and remaining_balance:
             # 推送电量余额通知
-            push_notification(config, remaining_balance, remaining_power, total_power)
+            push_power_notification(config, remaining_balance, remaining_power, total_power)
         else:
             print("未找到匹配的电量信息")
 
